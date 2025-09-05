@@ -28,8 +28,6 @@ COPY --chmod=755 --chown=${UID}:${GID} entrypoint.sh /entrypoint.sh
 
 USER ${USER}
 RUN /entrypoint.sh version
-
-ENV UMASK=022 RUN_ARIA2=${INSTALL_ARIA2}
 VOLUME /opt/openlist/data/
 EXPOSE 5244 5245
 CMD [ "/entrypoint.sh" ]
