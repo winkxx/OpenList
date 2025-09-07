@@ -1,4 +1,4 @@
-#!/bin/bash
+ #!/bin/bash
 #!！
 
 
@@ -23,18 +23,18 @@ wget git.io/tracker.sh
 chmod 0777 /tracker.sh
 /bin/bash tracker.sh "/root/test/aria2.conf"
 
-rm -rf /bot
-git clone https://github.com/winkxx/OpenList.git
-chmod 0777 /OpenList
-mkdir /bot/
-chmod 0777 /bot
-mv /OpenList/bot/* /bot/
-chmod -R 777 /bot
+#rm -rf /bot
+#git clone https://github.com/winkxx/OpenList.git
+#chmod 0777 /OpenList
+#mkdir /bot/
+#chmod 0777 /bot
+#mv /OpenList/bot/* /bot/
+#chmod -R 777 /bot
 
-rm /etc/nginx/nginx.conf
-cp /OpenList/root/nginx.conf /etc/nginx/
+#rm /etc/nginx/nginx.conf
+#cp /OpenList/root/nginx.conf /etc/nginx/
 
-rm -rf /OpenList
+#rm -rf /OpenList
 
 #python3 /bot/nginx.py
 nginx -c /etc/nginx/nginx.conf
