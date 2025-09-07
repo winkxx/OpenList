@@ -25,8 +25,8 @@ COPY root /
 
 RUN sudo chmod 777 /install.sh
 RUN bash install.sh
-RUN sudo chmod 777 /openlist-install.sh install
-RUN bash Openlist-install.sh
+RUN sudo chmod 777 /openlist-install.sh 
+RUN bash openlist-install.sh install
 
 RUN mv /nginx.conf /etc/nginx/
 
