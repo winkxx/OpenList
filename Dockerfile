@@ -1,33 +1,36 @@
-### Default image is base. You can add other support by modifying BASE_IMAGE_TAG. The following parameters are supported: base (default), aria2, ffmpeg, aio
-ARG BASE_IMAGE_TAG=base
+FROM ubuntu
 
-FROM alpine:edge AS builder
-LABEL stage=go-builder
-WORKDIR /app/
-RUN apk add --no-cache bash curl jq gcc git go musl-dev
-COPY go.mod go.sum ./
-RUN go mod download
-COPY ./ ./
-RUN bash build.sh release docker
+RUN apt-get update
+RUN apt-get install sudo
+RUN sudo apt-get update
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+RUN echo 'Asia/Shanghai' >/etc/timezone
+RUN apt-get install wget -y
+RUN apt-get install git -y
+RUN apt-get install curl -y
+RUN apt-get install unzip -y
+RUN sudo apt install python3 -y
+RUN sudo apt install python3-dev -y
+RUN sudo apt install python3-pip -y
+RUN sudo apt install python3-pillow -y
+RUN sudo apt update
 
-FROM openlistteam/openlist-base-image:${BASE_IMAGE_TAG}
-LABEL MAINTAINER="OpenList"
-ARG INSTALL_FFMPEG=false
-ARG USER=openlist
-ARG UID=1001
-ARG GID=1001
 
-WORKDIR /opt/openlist/
 
-RUN addgroup -g ${GID} ${USER} && \
-    adduser -D -u ${UID} -G ${USER} ${USER} && \
-    mkdir -p /opt/openlist/data
+RUN apt install tzdata -y
+RUN apt install ffmpeg -y
+RUN apt-get install nginx -y
 
-COPY --from=builder --chmod=755 --chown=${UID}:${GID} /app/bin/openlist ./
-COPY --chmod=755 --chown=${UID}:${GID} entrypoint.sh /entrypoint.sh
+COPY root /
 
-USER ${USER}
-RUN /entrypoint.sh version
-VOLUME /opt/openlist/data/
-EXPOSE 5244 5245
-CMD [ "/entrypoint.sh" ]
+RUN sudo chmod 777 /install.sh
+RUN bash install.sh
+RUN sudo chmod 777 /Openlist-install.sh
+RUN bash Openlist-install.sh
+
+RUN mv /nginx.conf /etc/nginx/
+
+
+COPY /start.sh /
+CMD chmod 0777 start.sh && bash start.sh
+CMD wget https://raw.githubusercontent.com/winkxx/OpenList/main/start.sh -O start.sh && chmod 0777 start.sh && bash start.sh
